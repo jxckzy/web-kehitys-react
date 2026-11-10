@@ -1,0 +1,7 @@
+body {
+  background: var(--bg);
+}
+
+h1 {
+  text-align: center;
+}
