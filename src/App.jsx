@@ -1,23 +1,24 @@
 import './App.css';
-import Greeting from './components/Greeting.jsx';
-import Home from './components/Home.jsx';
+import {Route, BrowserRouter, Routes} from 'react-router';
+import Home from './views/Home';
+import Layout from './components/Layout';
+import Profile from './views/Profile';
+import Upload from './views/Upload';
+import Single from './views/Single';
 
 const App = () => {
-  const sitename = 'My App';
-  const style = {
-    color: 'red',
-    fontSize: '24px',
-  };
-
   return (
     <>
-      <h1 style={style}>{sitename}</h1>
-      <p className="subtitle">Tässä on yksinkertainen sovellukseni.</p>
-      {/* <p style={style}>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-      </p>
-      <Greeting name="Alice" age={25} isTeacher={false} /> */}
-      <Home />
+      <BrowserRouter basename={import.meta.env.BASE_URL}>
+        <Routes>
+          <Route element={<Layout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/upload" element={<Upload />} />
+            <Route path="/single" element={<Single />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </>
   );
 };

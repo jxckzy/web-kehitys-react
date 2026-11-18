@@ -1,7 +1,7 @@
 // write "rafce" to generate a React component template
 // home.jsx for future use
-import MediaRow from './MediaRow';
-import SingleView from './SingleView';
+import MediaRow from '../components/MediaRow';
+import SingleView from '../components/SingleView';
 import {useState} from 'react';
 
 const Home = () => {
@@ -55,6 +55,7 @@ const Home = () => {
             <th>Created</th>
             <th>Size</th>
             <th>Type</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
