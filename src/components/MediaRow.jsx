@@ -1,18 +1,24 @@
-const MediaRow = (props) => {
-  const {item} = props;
+const MediaRow = ({item, selectedItem, setSelectedItem}) => {
   return (
-    <>
-      <tr key={item.media_id}>
-        <td>
+    <tr onClick={() => setSelectedItem(item)}>
+      <td>
+        <button
+          type="button"
+          aria-pressed={selectedItem?.media_id === item.media_id}
+          onClick={(event) => {
+            event.stopPropagation();
+            setSelectedItem(item);
+          }}
+        >
           <img src={item.thumbnail} alt={item.title} />
-        </td>
-        <td>{item.title}</td>
-        <td>{item.description}</td>
-        <td>{new Date(item.created_at).toLocaleString('fi-FI')}</td>
-        <td>{item.filesize}</td>
-        <td>{item.media_type}</td>
-      </tr>
-    </>
+        </button>
+      </td>
+      <td>{item.title}</td>
+      <td>{item.description}</td>
+      <td>{new Date(item.created_at).toLocaleString('fi-FI')}</td>
+      <td>{item.filesize}</td>
+      <td>{item.media_type}</td>
+    </tr>
   );
 };
 
