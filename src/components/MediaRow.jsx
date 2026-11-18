@@ -1,3 +1,5 @@
+import {Link} from 'react-router';
+
 const MediaRow = ({item, selectedItem, setSelectedItem}) => {
   return (
     <tr onClick={() => setSelectedItem(item)}>
@@ -18,6 +20,11 @@ const MediaRow = ({item, selectedItem, setSelectedItem}) => {
       <td>{new Date(item.created_at).toLocaleString('fi-FI')}</td>
       <td>{item.filesize}</td>
       <td>{item.media_type}</td>
+      <td>
+        <Link to="/single" state={item}>
+          Display
+        </Link>{' '}
+      </td>
     </tr>
   );
 };
