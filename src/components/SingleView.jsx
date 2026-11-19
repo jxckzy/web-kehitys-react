@@ -23,6 +23,7 @@ const SingleView = (props) => {
         </video>
       )}
       <p>{item.description}</p>
+      <p>Owner: {item.username}</p>
     </dialog>
   );
 };
