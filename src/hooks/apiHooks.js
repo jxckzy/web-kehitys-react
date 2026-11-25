@@ -3,6 +3,7 @@ import {fetchData} from '../utils/fetchData';
 
 const MEDIA_API = import.meta.env.VITE_MEDIA_API;
 const AUTH_API = import.meta.env.VITE_AUTH_API;
+const UPLOAD_API = import.meta.env.VITE_UPLOAD_SERVER;
 
 /**
  * Custom hook for all media endpoint API functionalities
@@ -33,7 +34,30 @@ const useMedia = () => {
     getMedia();
   }, []);
 
-  return {mediaArray};
+  const postMedia = async (file, inputs, token) => {
+    const mediaData = {
+      title: inputs.title,
+      description: inputs.description,
+      filename: file.filename,
+      media_type: file.media_type,
+      filesize: file.filesize,
+    };
+
+    console.log(mediaData);
+    const fetchOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      },
+      body: JSON.stringify(mediaData),
+    };
+
+    const mediaResponse = await fetchData(MEDIA_API + '/media', fetchOptions);
+    return mediaResponse;
+  };
+
+  return {mediaArray, postMedia};
 };
 
 /**
@@ -89,4 +113,22 @@ const useAuthentication = () => {
   return postLogin;
 };
 
-export {useMedia, useUser, useAuthentication};
+const useFile = () => {
+  const postFile = async (file, token) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const fetchOptions = {
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer ' + token,
+      },
+      body: formData,
+    };
+
+    const fileData = await fetchData(`${UPLOAD_API}/upload`, fetchOptions);
+    return {fileData};
+  };
+  return postFile;
+};
+
+export {useMedia, useUser, useAuthentication, useFile};
