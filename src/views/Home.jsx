@@ -10,7 +10,7 @@ const Home = () => {
 
   // ensimmäisessä renderöinnissä dataa ei ole vielä haettu
   // siksi tyhjä array
-  const {mediaArray} = useMedia(10);
+  const {mediaArray} = useMedia();
 
   return (
     <>
