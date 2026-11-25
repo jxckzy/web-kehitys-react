@@ -2,44 +2,15 @@
 // home.jsx for future use
 import MediaRow from '../components/MediaRow';
 import SingleView from '../components/SingleView';
-import {useState, useEffect} from 'react';
-import {fetchData} from '../utils/fetchData';
-
-const MEDIA_API = import.meta.env.VITE_MEDIA_API;
-const AUTH_API = import.meta.env.VITE_AUTH_API;
+import {useState} from 'react';
+import {useMedia} from '../hooks/apiHooks';
 
 const Home = () => {
   const [selectedItem, setSelectedItem] = useState(null);
 
   // ensimmäisessä renderöinnissä dataa ei ole vielä haettu
   // siksi tyhjä array
-  const [mediaArray, setMediaArray] = useState([]);
-
-  useEffect(() => {
-    const getMedia = async () => {
-      try {
-        // 1. haetaan ensin pelkkä mediadata
-        const mediaFiles = await fetchData(MEDIA_API + '/media');
-        // 2. lisätään jokaiselle mediatiedostolle username ominaisuus hakemalla
-        // fetchillä auth apista jokaisen mediatiedoston omistaja user_id:n perusteella
-        // yksi kerrallaan. Kun kaikki pyynnöt ovat valmistuneet, promise.all() kaikkien pyyntöjen
-        // tulokset yhtenä taulukkona
-        const mediaFilesWithUsernames = await Promise.all(
-          mediaFiles.map(async (mediaFile) => {
-            const user = await fetchData(
-              `${AUTH_API}/users/${mediaFile.user_id}`,
-            );
-            return {...mediaFile, username: user.username};
-          }),
-        );
-        // 3. asetaan datat stateen vasta kaikkien http-pyyntöjen onnistuttua
-        setMediaArray(mediaFilesWithUsernames);
-      } catch (error) {
-        console.error('Failed to fetch media and owner data:', error);
-      }
-    };
-    getMedia();
-  }, []);
+  const {mediaArray} = useMedia();
 
   return (
     <>
