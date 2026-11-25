@@ -3,7 +3,7 @@ import {Route, BrowserRouter, Routes} from 'react-router';
 import Home from './views/Home';
 import Layout from './components/Layout';
 import Profile from './views/Profile';
-import Upload from './views/Upload-Simple';
+import Upload from './views/Upload';
 import Single from './views/Single';
 import Demo from './views/Demo';
 import Login from './views/Login';
