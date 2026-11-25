@@ -1,36 +1,56 @@
 import {Link, Outlet} from 'react-router';
+import {useUserContext} from '../hooks/contextHooks';
+import {useEffect, useRef} from 'react';
 
 const Layout = () => {
+  const {user, isLoading, handleAutoLogin} = useUserContext();
+  const autoLoginStarted = useRef(false);
+
+  useEffect(() => {
+    if (autoLoginStarted.current) {
+      return;
+    }
+    autoLoginStarted.current = true;
+    void handleAutoLogin();
+  }, [handleAutoLogin]);
+
   const sitename = 'My App';
   const style = {
     color: 'red',
     fontSize: '24px',
   };
+
   return (
     <>
       <header>
         <h1 style={style}>{sitename}</h1>
         <p className="subtitle">Tässä on yksinkertainen sovellukseni.</p>
         <nav>
+          <div>Hei {user?.username ?? 'vierailija'}!</div>
           <ul>
             <li>
               <Link to="/">Home</Link>
             </li>
             <li>
-              <Link to="/profile">Profile</Link>
-            </li>
-            <li>
-              <Link to="/upload">Upload</Link>
-            </li>
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
-            <li>
-              <Link to="/logout">Logout</Link>
-            </li>
-            <li>
               <Link to="/demo">Demo</Link>
             </li>
+            {!isLoading && user ? (
+              <>
+                <li>
+                  <Link to="/profile">Profile</Link>
+                </li>
+                <li>
+                  <Link to="/upload">Upload</Link>
+                </li>
+                <li>
+                  <Link to="/logout">Logout</Link>
+                </li>
+              </>
+            ) : !isLoading ? (
+              <li>
+                <Link to="/login">Login</Link>
+              </li>
+            ) : null}
           </ul>
         </nav>
       </header>

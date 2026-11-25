@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useCallback} from 'react';
 import {fetchData} from '../utils/fetchData';
 
 const MEDIA_API = import.meta.env.VITE_MEDIA_API;
@@ -9,12 +9,12 @@ const AUTH_API = import.meta.env.VITE_AUTH_API;
  *
  * @returns
  */
-const useMedia = (limit) => {
+const useMedia = () => {
   const [mediaArray, setMediaArray] = useState([]);
   useEffect(() => {
     const getMedia = async () => {
       // 1. haetaan ensin pelkkä mediadata
-      const mediaFiles = await fetchData(MEDIA_API + '/media?limit=' + limit);
+      const mediaFiles = await fetchData(MEDIA_API + '/media');
       // 2. lisätään jokaiselle mediatiedostolle username ominaisuus hakemalla
       // fetchillä auth apista jokaisen mediatiedoston omistaja user_id:n perusteella
       // yksi kerrallaan. Kun kaikki pyynnöt ovat valmistuneet, promise.all() kaikkien pyyntöjen
@@ -30,7 +30,7 @@ const useMedia = (limit) => {
       // 3. asetaan datat stateen vasta kaikkien http-pyyntöjen onnistuttua
       setMediaArray(mediaFilesWithUsernames);
     };
-    getMedia(10);
+    getMedia();
   }, []);
 
   return {mediaArray};
@@ -45,12 +45,12 @@ const useUser = () => {
     return user;
   };
 
-  const getUserByToken = async (token) => {
+  const getUserByToken = useCallback(async (token) => {
     const result = await fetchData(`${AUTH_API}/users/token`, {
       headers: {Authorization: 'Bearer ' + token},
     });
     return result.user;
-  };
+  }, []);
 
   const postRegistration = async (inputs) => {
     const fetchOptions = {
