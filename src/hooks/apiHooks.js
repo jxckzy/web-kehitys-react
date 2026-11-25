@@ -128,7 +128,7 @@ const useFile = () => {
     const fileData = await fetchData(`${UPLOAD_API}/upload`, fetchOptions);
     return {fileData};
   };
-  return postFile;
+  return {postFile};
 };
 
 export {useMedia, useUser, useAuthentication, useFile};
